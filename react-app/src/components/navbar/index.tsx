@@ -2,63 +2,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 import { Logo } from "./logo";
 import { ArrowRight, Menu } from "lucide-react"
 import { Button, buttonVariants } from "../ui/button";
-
-const NavbarContainer = styled.nav`
-  background-color: #333;
-  // padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-
-const NavList = styled.ul`
-  list-style: none;
-  display: flex;
-  gap: 20px;
-`;
-
-const NavItem = styled(Link)`
-  text-decoration: none;
-  color: white;
-  font-size: 18px;
-  transition: color 0.3s ease-in-out;
-
-  &:hover {
-    color: #f39c12;
-  }
-`;
-
-// const Navbar = () => {
-//   const { user } = useSelector((state: any) => state.authReducer);
-
-//   return (
-//     <NavbarContainer>
-//       <NavList>
-//         <NavItem to="/">Home</NavItem>
-//         <NavItem to="/about">About</NavItem>
-//         {!user ? (
-//           <>
-//             <NavItem to="/login">Login</NavItem>
-//             <NavItem to="/register">Register</NavItem>
-//           </>
-//         ) : (
-//           <NavItem to="/logout">Logout</NavItem>
-//         )}
-//       </NavList>
-//     </NavbarContainer>
-//   );
-// };
-
-// export default Navbar;
-
-
-
-
 
 
 const navigationItems = [

@@ -165,7 +165,7 @@ export default function LoginPage() {
             {!isSuccess ? (
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Username</Label>
+                  <Label htmlFor="name">Email ID</Label>
                   <Input
                     id="name"
                     type="text"
@@ -277,7 +277,7 @@ export default function LoginPage() {
         {!isSuccess && <div className="text-center mt-6">
           <p className="text-gray-600 text-sm">
             {"Don't have an account? "}
-            <a href="#" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+            <a href="/register" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
               Sign up here
             </a>
           </p>
