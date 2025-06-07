@@ -40,7 +40,7 @@ const Navbar = () => {
               <Link to="/login" className={buttonVariants({ variant: "outline" })}>
                 Log In
               </Link>
-              <Link to="/register" className={buttonVariants({ variant: "default" })} >
+              <Link to="/register" className={buttonVariants({ variant: "black", size: "sm" })} >
                 Sign In
               </Link>
             </>

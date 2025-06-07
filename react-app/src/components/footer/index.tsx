@@ -108,7 +108,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="container flex flex-col gap-2 py-6 px-4 md:px-6 lg:flex-row lg:items-center lg:justify-between">
-                <p className="text-sm text-gray-500 dark:text-gray-400">© 2025 JobTracker. All rights reserved.</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">© 2025  JobTracker. All rights reserved.</p>
                 <div className="flex gap-4">
                     <Link
                         to="#"

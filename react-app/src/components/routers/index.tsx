@@ -5,7 +5,8 @@ import Login from "../login";
 import Register from "../register";
 import Layout from "../layout";
 import Logout from "../logout";
-const Dashboard = lazy(() => import("../dashboard"));
+import { DashboardPage } from "../dashboard/DashboardPage";
+
 
 const Routering = () => {
   return (
@@ -17,7 +18,7 @@ const Routering = () => {
               <Route index element={<Home />} />
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="dashboard" element={<DashboardPage />} />
               <Route path="logout" element={<Logout />} />
             </Route>
           </Routes>
