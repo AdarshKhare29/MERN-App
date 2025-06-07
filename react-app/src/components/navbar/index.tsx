@@ -2,8 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Logo } from "./logo";
-import { ArrowRight, Menu } from "lucide-react"
+import { Menu, BriefcaseIcon } from "lucide-react"
 import { Button, buttonVariants } from "../ui/button";
 
 
@@ -17,40 +16,46 @@ const navigationItems = [
 const Navbar = () => {
   const { user } = useSelector((state: any) => state.authReducer);
   return (
-    <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
-      <div className="container px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          <Logo />
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
 
-          <nav className="hidden md:flex items-center space-x-8">
-            {navigationItems.map((item) => (
-              <Link key={item.href} to={item.href} className="text-gray-600 hover:text-gray-900 transition-colors">
-                {item.label}
+        <a href="/" className="flex items-center gap-2 font-semibold">
+          <BriefcaseIcon size={24} />
+          <span>JobTracker</span>
+        </a>
+
+        {/* Navigation - center on md+ */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navigationItems.map((item) => (
+            <Link key={item.href} to={item.href} className="text-sm font-medium hover:text-primary">
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Auth buttons and mobile menu */}
+        <div className="flex items-center gap-2">
+          {!user ? (
+            <>
+              <Link to="/login" className={buttonVariants({ variant: "outline" })}>
+                Log In
               </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            {!user ? (
-              <>
-                <Link to={"/register"} className={buttonVariants({ variant: "default", size: "default" })}>
-                  Sign In
-                </Link>
-                <Link to={"/login"} className={buttonVariants({ variant: "default", size: "default" })}>
-                  Log In
-                </Link>
-              </>)
-              : (
-                <Link to={"/logout"} className={buttonVariants({ variant: "default", size: "default" })}>Logout</Link>
-              )}
-            <Button className="md:hidden">
-              <Menu className="w-5 h-5" />
-            </Button>
-
-          </div>
+              <Link to="/register" className={buttonVariants({ variant: "default" })} >
+                Sign In
+              </Link>
+            </>
+          ) : (
+            <Link to="/logout" className={buttonVariants({ variant: "default" })}>
+              Logout
+            </Link>
+          )}
+          <Button className="md:hidden hover:text-gray-900" variant="ghost" size="icon">
+            <Menu className="w-5 h-5" />
+          </Button>
         </div>
       </div>
     </header>
+
   )
 }
 export default Navbar
