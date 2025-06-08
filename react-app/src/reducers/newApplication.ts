@@ -19,6 +19,8 @@ interface ApplicationState {
 }
 export const ADD_APPLICATION = "ADD_APPLICATION";
 export const APPLICATION_FAIL = "APPLICATION_FAIL";
+export const GET_APPLICATIONS = "GET_APPLICATIONS";
+export const GET_APPLICATIONS_FAIL = "GET_APPLICATIONS_FAIL";
 
 
 const initialState: ApplicationState = {
@@ -44,17 +46,40 @@ export const addNewApplication =
         }
     };
 
+
+export const getAllApplications = () => async (dispatch: any) => {
+    try {
+        const res = await axios.get(`${API_URL}/all`);
+        dispatch({ type: GET_APPLICATIONS, payload: res.data.applications });
+    } catch (error: any) {
+        dispatch({
+            type: GET_APPLICATIONS_FAIL,
+            payload: error.response?.data?.message || "Failed to fetch applications",
+        });
+    }
+};
 const applicationReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case ADD_APPLICATION:
             return {
                 ...state,
-                applications: [...state.applications, action.payload.application],
+                applications: [...state.applications, action.payload],
                 error: null,
             };
 
         case APPLICATION_FAIL:
             return { ...state, error: action.payload };
+        case GET_APPLICATIONS:
+            return {
+                ...state,
+                applications: action.payload,
+                error: null,
+            };
+        case GET_APPLICATIONS_FAIL:
+            return {
+                ...state,
+                error: action.payload,
+            };
         default:
             return state;
     }

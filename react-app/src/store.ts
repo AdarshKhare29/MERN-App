@@ -7,7 +7,7 @@ import applicationReducer from "./reducers/newApplication";
 export const store = configureStore({
   reducer: {
     authReducer: authReducer,
-    applicationReducer: applicationReducer
+    application: applicationReducer
   },
 
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),

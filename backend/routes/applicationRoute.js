@@ -58,4 +58,20 @@ router.post("/addApplication", async (req, res) => {
     }
 });
 
+// Get all applications
+router.get("/all", async (req, res) => {
+    try {
+        const applications = await Application.find()
+        res.status(200).json({
+            applications
+        });
+    } catch (error) {
+        console.error("Fetch error:", error);
+        res.status(500).json({
+            message: "Failed to fetch applications"
+        });
+    }
+});
+
+
 export default router;
