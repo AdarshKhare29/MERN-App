@@ -3,15 +3,18 @@ import { AppDispatch } from "../store";
 const API_URL = `${process.env.REACT_APP_API_BASE_URL}/application`;
 
 // types.ts
+export type ApplicationStatus = "applied" | "interview" | "offer" | "rejected";
+
 export interface Application {
     company: string;
     jobTitle: string;
     location: string;
     salary?: string;
     applicationDate: string;
-    status: string;
+    status: ApplicationStatus;
     notes?: string;
     url?: string;
+    _id?: number;
 }
 interface ApplicationState {
     applications: Application[];

@@ -3,7 +3,7 @@ import { PlusCircle } from "lucide-react"
 import { Button } from "../ui/button"
 import Sidebar from "../shared/sidebar"
 import StatsCards from "./stats-cards"
-// import { RecentApplications } from "./RecentApplications"
+import RecentApplications from "./RecentApplications"
 // import { UpcomingInterviews } from "./upcoming-interviews"
 // import { ApplicationTimeline } from "./ApplicationTimeline"
 import AddApplicationModal from "./applicationFormModal"
@@ -13,6 +13,7 @@ const Dashboard = () => {
 
     const openAddModal = () => setIsAddModalOpen(true)
     const closeAddModal = () => setIsAddModalOpen(false)
+
     return (
         <div className="flex min-h-screen w-full flex-col">
 
@@ -31,8 +32,8 @@ const Dashboard = () => {
                             </Button>
                         </div>
                         <StatsCards />
-                        {/* <RecentApplications applications={recentApplications} />
-                        <div className="grid gap-6 md:grid-cols-2">
+                        <RecentApplications />
+                        {/* <div className="grid gap-6 md:grid-cols-2">
                             <UpcomingInterviews interviews={upcomingInterviews} />
                             <ApplicationTimeline />
                         </div> */}

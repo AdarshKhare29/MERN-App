@@ -6,6 +6,7 @@ import { Input } from "../ui/input"
 import { CheckCircle } from "../icons"
 import { useDispatch } from "react-redux"
 import { addNewApplication } from "../../reducers/newApplication"
+import { ApplicationStatus } from "../../reducers/newApplication"
 interface AddApplicationModalProps {
     isOpen: boolean
     onClose: () => void
@@ -69,7 +70,9 @@ const AddApplicationModal = ({ isOpen, onClose }: AddApplicationModalProps) => {
         setIsSubmitting(true)
         console.log(formData)
         try {
-            const response = await dispatch(addNewApplication(formData) as any)
+            const response = await dispatch(
+                addNewApplication({ ...formData, status: formData.status as ApplicationStatus }) as any
+            );
             console.log(response)
             if (response.success) {
                 // API call was successful
