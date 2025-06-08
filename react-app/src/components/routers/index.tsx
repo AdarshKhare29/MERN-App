@@ -5,8 +5,8 @@ import Login from "../login";
 import Register from "../register";
 import Layout from "../layout";
 import Logout from "../logout";
-import { DashboardPage } from "../dashboard/DashboardPage";
-
+import Dashboard from "../dashboard";
+import ProtectedRoute from "./protectedRoute";
 
 const Routering = () => {
   return (
@@ -18,8 +18,16 @@ const Routering = () => {
               <Route index element={<Home />} />
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
-              <Route path="dashboard" element={<DashboardPage />} />
               <Route path="logout" element={<Logout />} />
+
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
           </Routes>
         </>

@@ -2,9 +2,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Menu, BriefcaseIcon } from "lucide-react"
+import { Menu, BriefcaseIcon, Search } from "lucide-react"
 import { Button, buttonVariants } from "../ui/button";
-
+import { Input } from "../ui/input";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 const navigationItems = [
   { href: "#features", label: "Features" },
@@ -45,9 +46,26 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            <Link to="/logout" className={buttonVariants({ variant: "default" })}>
-              Logout
-            </Link>
+            <>
+              <Link to="/logout" className={buttonVariants({ variant: "default" })}>
+                Logout
+              </Link>
+              <div className="ml-auto flex items-center gap-4">
+                <form className="hidden md:block">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input type="search" placeholder="Search jobs..." className="w-64 bg-background pl-8" />
+                  </div>
+                </form>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="/placeholder-user.jpg" alt="User" />
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </div>
+            </>
           )}
           <Button className="md:hidden hover:text-gray-900" variant="ghost" size="icon">
             <Menu className="w-5 h-5" />
