@@ -46,6 +46,11 @@ router.post("/addApplication", async (req, res) => {
                 company: newApplication.company,
                 jobTitle: newApplication.jobTitle,
                 location: newApplication.location,
+                applicationDate: newApplication.applicationDate,
+                notes: newApplication.notes,
+                salary: newApplication.salary,
+                status: newApplication.status,
+                url: newApplication.url
                 // etc.
             },
             message: "Application registered successfully",

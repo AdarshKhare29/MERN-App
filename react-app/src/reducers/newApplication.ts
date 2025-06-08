@@ -35,8 +35,8 @@ export const addNewApplication =
     (data: Application) => async (dispatch: AppDispatch) => {
         try {
             const res = await axios.post(`${API_URL}/addApplication`, data);
-            dispatch({ type: ADD_APPLICATION, payload: res.data });
-            return { success: true, data: res.data };
+            dispatch({ type: ADD_APPLICATION, payload: res.data.application });
+            return { success: true, data: res.data.application };
         } catch (error: any) {
             dispatch({
                 type: APPLICATION_FAIL,

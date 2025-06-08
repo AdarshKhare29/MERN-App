@@ -5,7 +5,8 @@ import { Badge } from "../ui/badge"
 import { useSelector, useDispatch } from "react-redux"
 import { getAllApplications } from "../../reducers/newApplication"
 import type { Application } from "../../reducers/newApplication";
-import { formatDistanceToNow, isValid, parseISO } from "date-fns";
+import { formatDistanceToNow, isValid, parseISO, differenceInCalendarDays } from "date-fns";
+import { useNavigate } from "react-router-dom"
 
 
 const statusColors = {
@@ -25,6 +26,7 @@ const statusLabels = {
 const RecentApplications = () => {
     const dispatch = useDispatch();
     const { applications = [], error } = useSelector((state: any) => state.application || {});
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getAllApplications() as any);
@@ -52,17 +54,24 @@ const RecentApplications = () => {
                             <div className="text-sm text-gray-600">
                                 {(() => {
                                     const parsedDate = application.applicationDate ? parseISO(application.applicationDate) : null;
-                                    return parsedDate && isValid(parsedDate)
-                                        ? formatDistanceToNow(parsedDate, { addSuffix: true })
-                                        : "Unknown date";
+
+                                    if (!parsedDate || !isValid(parsedDate)) return "Unknown date";
+
+                                    const now = new Date();
+                                    const diffInDays = differenceInCalendarDays(now, parsedDate);
+
+                                    if (diffInDays === 0) return "Today";
+                                    if (diffInDays === 1) return "Yesterday";
+                                    return `${diffInDays} days ago`;
                                 })()}
+
                             </div>
                         </div>
                     ))}
                 </div>
             </CardContent>
             <CardFooter>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" onClick={() => navigate("/applications")}>
                     View All Applications
                 </Button>
             </CardFooter>

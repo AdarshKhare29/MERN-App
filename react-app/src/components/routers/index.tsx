@@ -7,6 +7,7 @@ import Layout from "../layout";
 import Logout from "../logout";
 import Dashboard from "../dashboard";
 import ProtectedRoute from "./protectedRoute";
+import ApplicationsPage from "../applications";
 
 const Routering = () => {
   return (
@@ -25,6 +26,14 @@ const Routering = () => {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/applications"
+                element={
+                  <ProtectedRoute>
+                    <ApplicationsPage />
                   </ProtectedRoute>
                 }
               />
