@@ -41,7 +41,7 @@ const getErrorMessage = (error: any) => {
 const Register = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { token, error, user } = useSelector((state: any) => state.authReducer)
+  const { token, error, user } = useSelector((state: any) => state.auth)
 
   const [userInfo, setUserInfo] = useState({
     name: "",

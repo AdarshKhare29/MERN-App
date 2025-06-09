@@ -8,6 +8,8 @@ import Logout from "../logout";
 import Dashboard from "../dashboard";
 import ProtectedRoute from "./protectedRoute";
 import ApplicationsPage from "../applications";
+import InterviewsPage from "../interviews";
+import Settings from "../settings";
 
 const Routering = () => {
   return (
@@ -34,6 +36,22 @@ const Routering = () => {
                 element={
                   <ProtectedRoute>
                     <ApplicationsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/interviews"
+                element={
+                  <ProtectedRoute>
+                    <InterviewsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
                   </ProtectedRoute>
                 }
               />

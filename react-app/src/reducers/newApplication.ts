@@ -16,7 +16,7 @@ export interface Application {
     url?: string;
     _id?: number;
 }
-interface ApplicationState {
+export interface ApplicationState {
     applications: Application[];
     error: string | null;
 }
@@ -85,7 +85,7 @@ export const getAllApplications = () => async (dispatch: any) => {
     }
 };
 
-const applicationReducer = (state = initialState, action: any) => {
+const applicationReducer = (state: ApplicationState | undefined = initialState, action: any): ApplicationState => {
     switch (action.type) {
         case ADD_APPLICATION:
             return {

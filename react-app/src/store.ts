@@ -1,17 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authMiddleware from "./authMiddleware";
-import { thunk } from "redux-thunk";
-import { persistStore } from "redux-persist";
-import authReducer from "./reducers/auth";
-import applicationReducer from "./reducers/newApplication";
-export const store = configureStore({
-  reducer: {
-    authReducer: authReducer,
-    application: applicationReducer
-  },
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import rootReducer, { RootStateReducer } from "./reducers";
 
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["auth"],
+};
+
+const persistedReducer = persistReducer<RootStateReducer>(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

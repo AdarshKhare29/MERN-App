@@ -30,11 +30,6 @@ export const logout = () => (dispatch: any) => {
   dispatch({ type: LOGOUT });
   console.log("here ")
 };
-const initialState = {
-  token: localStorage.getItem("token") || null,
-  user: null,
-  error: null,
-};
 
 export const register =
   (name: string, email: string, password: string) => async (dispatch: any) => {
@@ -56,7 +51,19 @@ export const register =
     }
   };
 
-const authReducer = (state = initialState, action: any) => {
+export interface AuthState {
+  token: string | null;
+  user: any | null;
+  error: string | null;
+}
+
+const initialState: AuthState = {
+  token: localStorage.getItem("token"),
+  user: null,
+  error: null,
+};
+
+const authReducer = (state: AuthState | undefined = initialState, action: any): AuthState => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       return {
