@@ -1,10 +1,12 @@
 import express from "express";
 import Application from "../modal/application.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
 // Add Application
-router.post("/addApplication", async (req, res) => {
+// Protect this route with auth middleware
+router.post("/addApplication", auth, async (req, res) => {
     const {
         company,
         jobTitle,
@@ -15,17 +17,18 @@ router.post("/addApplication", async (req, res) => {
         notes,
         url
     } = req.body;
-    console.log("inside add apllication", req.body);
 
     try {
         const existingUser = await Application.findOne({
-            company
+            company,
+            userId: req.user.id // ✅ filtered by user
         });
-        if (existingUser)
+
+        if (existingUser) {
             return res.status(400).json({
                 message: "Application already exists with same company"
             });
-
+        }
 
         const newApplication = new Application({
             company,
@@ -35,10 +38,11 @@ router.post("/addApplication", async (req, res) => {
             applicationDate,
             status,
             notes,
-            url
+            url,
+            userId: req.user.id // ✅ assign user ID securely
         });
-        await newApplication.save();
 
+        await newApplication.save();
 
         res.status(201).json({
             application: {
@@ -51,7 +55,6 @@ router.post("/addApplication", async (req, res) => {
                 salary: newApplication.salary,
                 status: newApplication.status,
                 url: newApplication.url
-                // etc.
             },
             message: "Application registered successfully",
         });
@@ -63,10 +66,13 @@ router.post("/addApplication", async (req, res) => {
     }
 });
 
-// Get all applications
-router.get("/all", async (req, res) => {
+
+// Get only current user's applications
+router.get("/all", auth, async (req, res) => {
     try {
-        const applications = await Application.find()
+        const applications = await Application.find({
+            userId: req.user.id
+        });
         res.status(200).json({
             applications
         });

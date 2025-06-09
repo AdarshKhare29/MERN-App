@@ -5,7 +5,7 @@ import { Badge } from "../ui/badge"
 import { useSelector, useDispatch } from "react-redux"
 import { getAllApplications } from "../../reducers/newApplication"
 import type { Application } from "../../reducers/newApplication";
-import { formatDistanceToNow, isValid, parseISO, differenceInCalendarDays } from "date-fns";
+import { isValid, parseISO, differenceInCalendarDays } from "date-fns";
 import { useNavigate } from "react-router-dom"
 
 

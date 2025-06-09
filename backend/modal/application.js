@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
 
 const ApplicationSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     jobTitle: {
         type: String,
         required: true
     },
     company: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     location: {
         type: String,
@@ -34,4 +38,5 @@ const ApplicationSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model("Appplication", ApplicationSchema);
+
+export default mongoose.model("Application", ApplicationSchema);

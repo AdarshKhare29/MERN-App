@@ -6,17 +6,17 @@ import { Badge } from "../ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import Sidebar from "../shared/sidebar"
 import AddApplicationModal from "../dashboard/applicationFormModal"
-import { useApplicationsData } from "../../hooks/use-application-data"
 import { useSelector, useDispatch } from "react-redux"
 import { getAllApplications } from "../../reducers/newApplication"
 import type { Application } from "../../reducers/newApplication";
-import { formatDistanceToNow, isValid, parseISO, differenceInCalendarDays } from "date-fns";
+import { isValid, parseISO, differenceInCalendarDays } from "date-fns";
+import { EditApplicationModal } from "./editApplicationModal"
 
 const ApplicationsPage = () => {
-    const { addApplication } = useApplicationsData()
     const dispatch = useDispatch();
     const { applications = [], error } = useSelector((state: any) => state.application || {});
-
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [editingApplication, setEditingApplication] = useState<Application | null>(null)
     useEffect(() => {
         dispatch(getAllApplications() as any);
     }, [dispatch]);
@@ -83,15 +83,25 @@ const ApplicationsPage = () => {
     }, [applications, searchTerm, statusFilter, sortBy]);
 
 
-    const handleAddApplication = (application: any) => {
-        addApplication(application)
-    }
-
     // const handleDeleteApplication = (id: string) => {
     //     if (confirm("Are you sure you want to delete this application?")) {
     //         deleteApplication(id)
     //     }
     // }
+    const handleEditApplication = (application: Application) => {
+        console.log(application)
+        setEditingApplication(application)
+        setIsEditModalOpen(true)
+    }
+    const closeEditModal = () => {
+        setIsEditModalOpen(false)
+        setEditingApplication(null)
+    }
+
+    const handleUpdateApplication = (id: string, updates: Partial<Application>) => {
+        // updateApplication(id, updates)
+    }
+
 
     return (
         <div className="flex min-h-screen w-full flex-col">
@@ -232,10 +242,11 @@ const ApplicationsPage = () => {
                                                         <ExternalLink size={16} />
                                                     </Button>
                                                 )}
-                                                <Button variant="ghost" size="sm">
+                                                <Button variant="ghost" size="sm" onClick={() => handleEditApplication(application)}
+                                                    title="Edit application">
                                                     <Edit size={16} />
                                                 </Button>
-                                                {/* <Button variant="ghost" size="sm" onClick={() => handleDeleteApplication(application.id)}>
+                                                {/* <Button variant="ghost" size="sm" onClick={() => { }}>
                                                     <Trash2 size={16} />
                                                 </Button> */}
                                             </div>
@@ -262,6 +273,12 @@ const ApplicationsPage = () => {
                     setSortBy("date")
                 }}
             // onAddApplication={handleAddApplication}
+            />
+            <EditApplicationModal
+                isOpen={isEditModalOpen}
+                onClose={closeEditModal}
+                onUpdateApplication={handleUpdateApplication}
+                application={editingApplication}
             />
         </div>
     )

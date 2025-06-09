@@ -105,13 +105,3 @@ router.post("/login", async (req, res) => {
 });
 
 export default router;
-
-// const Router = express.Router();
-
-// Router.post("/login", async (req, res) => {
-//   const {
-//     userName,
-//     password
-//   } = req.body;
-//   try {} catch (err) {}
-// });

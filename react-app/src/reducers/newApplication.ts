@@ -34,8 +34,20 @@ const initialState: ApplicationState = {
 export const addNewApplication =
     (data: Application) => async (dispatch: AppDispatch) => {
         try {
-            const res = await axios.post(`${API_URL}/addApplication`, data);
+            const token = localStorage.getItem("token"); // Or wherever you're storing it
+
+            const res = await axios.post(
+                `${API_URL}/addApplication`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // ✅ send token
+                    }
+                }
+            );
+
             dispatch({ type: ADD_APPLICATION, payload: res.data.application });
+
             return { success: true, data: res.data.application };
         } catch (error: any) {
             dispatch({
@@ -50,10 +62,21 @@ export const addNewApplication =
     };
 
 
+
 export const getAllApplications = () => async (dispatch: any) => {
     try {
-        const res = await axios.get(`${API_URL}/all`);
-        dispatch({ type: GET_APPLICATIONS, payload: res.data.applications });
+        const token = localStorage.getItem("token"); // or from Redux state
+
+        const res = await axios.get(`${API_URL}/all`, {
+            headers: {
+                Authorization: `Bearer ${token}`  // ✅ Include JWT token
+            }
+        });
+
+        dispatch({
+            type: GET_APPLICATIONS,
+            payload: res.data.applications,
+        });
     } catch (error: any) {
         dispatch({
             type: GET_APPLICATIONS_FAIL,
@@ -61,6 +84,7 @@ export const getAllApplications = () => async (dispatch: any) => {
         });
     }
 };
+
 const applicationReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case ADD_APPLICATION:
