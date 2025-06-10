@@ -15,6 +15,7 @@ export interface Application {
     notes?: string;
     url?: string;
     _id?: number;
+    interviewQuestions?: string[];
 }
 export interface ApplicationState {
     applications: Application[];
@@ -66,7 +67,7 @@ export const addNewApplication =
 export const getAllApplications = () => async (dispatch: any) => {
     try {
         const token = localStorage.getItem("token"); // or from Redux state
-
+        console.log("token", token)
         const res = await axios.get(`${API_URL}/all`, {
             headers: {
                 Authorization: `Bearer ${token}`  // ✅ Include JWT token

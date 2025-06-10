@@ -10,6 +10,13 @@ import ProtectedRoute from "./protectedRoute";
 import ApplicationsPage from "../applications";
 import InterviewsPage from "../interviews";
 import Settings from "../settings";
+import { Navigate } from "react-router-dom";
+
+const RedirectHome = () => {
+  const isAuthenticated = !!localStorage.getItem("token");
+
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/home" replace />;
+};
 
 const Routering = () => {
   return (
@@ -18,7 +25,9 @@ const Routering = () => {
         <>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
+              {/* <Route path="/" element={<AuthRedirect />} /> */}
+              <Route index element={<RedirectHome />} />
+              <Route path="home" element={<Home />} />
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
               <Route path="logout" element={<Logout />} />
@@ -59,7 +68,7 @@ const Routering = () => {
           </Routes>
         </>
       </Suspense>
-    </Router>
+    </Router >
   );
 };
 export default Routering;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { PlusCircle, Search, Edit, Trash2, ExternalLink } from "../icons"
+import { PlusCircle, Search, Edit, Trash2, ExternalLink, Eye } from "lucide-react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Badge } from "../ui/badge"
@@ -11,16 +11,21 @@ import { getAllApplications } from "../../reducers/newApplication"
 import type { Application } from "../../reducers/newApplication";
 import { isValid, parseISO, differenceInCalendarDays } from "date-fns";
 import { EditApplicationModal } from "./editApplicationModal"
+import ApplicationDetails from "./ApplicationDetails"
 
 const ApplicationsPage = () => {
     const dispatch = useDispatch();
     const { applications = [], error } = useSelector((state: any) => state.application || {});
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [editingApplication, setEditingApplication] = useState<Application | null>(null)
+    const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+    const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
+
     useEffect(() => {
         dispatch(getAllApplications() as any);
     }, [dispatch]);
     console.log(applications)
+
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [statusFilter, setStatusFilter] = useState("all")
@@ -56,7 +61,6 @@ const ApplicationsPage = () => {
         };
     }, [applications]);
 
-    // Filter and sort applications
     const filteredApplications = useMemo(() => {
         return applications
             .filter((app: Application) => {
@@ -82,17 +86,12 @@ const ApplicationsPage = () => {
             });
     }, [applications, searchTerm, statusFilter, sortBy]);
 
-
-    // const handleDeleteApplication = (id: string) => {
-    //     if (confirm("Are you sure you want to delete this application?")) {
-    //         deleteApplication(id)
-    //     }
-    // }
     const handleEditApplication = (application: Application) => {
         console.log(application)
         setEditingApplication(application)
         setIsEditModalOpen(true)
     }
+
     const closeEditModal = () => {
         setIsEditModalOpen(false)
         setEditingApplication(null)
@@ -102,6 +101,15 @@ const ApplicationsPage = () => {
         // updateApplication(id, updates)
     }
 
+    const handleViewDetails = (application: Application) => {
+        setSelectedApplication(application)
+        setIsDetailsModalOpen(true)
+    }
+
+    const closeDetailsModal = () => {
+        setIsDetailsModalOpen(false)
+        setSelectedApplication(null)
+    }
 
     return (
         <div className="flex min-h-screen w-full flex-col">
@@ -109,7 +117,6 @@ const ApplicationsPage = () => {
                 <Sidebar />
                 <main className="flex-1 overflow-auto p-4 md:p-6">
                     <div className="grid gap-6">
-                        {/* Header */}
                         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                             <div>
                                 <h1 className="text-2xl font-bold tracking-tight">Applications</h1>
@@ -121,7 +128,6 @@ const ApplicationsPage = () => {
                             </Button>
                         </div>
 
-                        {/* Stats Cards */}
                         <div className="grid gap-4 md:grid-cols-4">
                             <Card>
                                 <CardHeader className="pb-2">
@@ -157,7 +163,6 @@ const ApplicationsPage = () => {
                             </Card>
                         </div>
 
-                        {/* Filters and Search */}
                         <Card>
                             <CardHeader>
                                 <CardTitle>Filter Applications</CardTitle>
@@ -210,12 +215,20 @@ const ApplicationsPage = () => {
                                     {filteredApplications.map((application: Application) => (
                                         <div
                                             key={application.company}
-                                            className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                                            className={`flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 ${application.status === 'interview' ? 'border-blue-300 bg-blue-50/30' : ''
+                                                }`}
                                         >
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-3 mb-2">
                                                     <h3 className="font-semibold">{application.jobTitle}</h3>
-                                                    <Badge className={statusColors[application.status]}>{statusLabels[application.status]}</Badge>
+                                                    <Badge className={statusColors[application.status]}>
+                                                        {statusLabels[application.status]}
+                                                    </Badge>
+                                                    {application.status === 'interview' && (
+                                                        <span className="text-xs text-blue-600 font-medium">
+                                                            📝 Click to add interview questions
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <p className="text-gray-600 mb-1">{application.company}</p>
                                                 <div className="flex items-center gap-4 text-sm text-gray-500">
@@ -237,6 +250,15 @@ const ApplicationsPage = () => {
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleViewDetails(application)}
+                                                    title="View details"
+                                                    className={application.status === 'interview' ? 'bg-blue-100 hover:bg-blue-200' : ''}
+                                                >
+                                                    <Eye size={16} />
+                                                </Button>
                                                 {application.url && (
                                                     <Button variant="ghost" size="sm" onClick={() => window.open(application.url, "_blank")}>
                                                         <ExternalLink size={16} />
@@ -246,9 +268,6 @@ const ApplicationsPage = () => {
                                                     title="Edit application">
                                                     <Edit size={16} />
                                                 </Button>
-                                                {/* <Button variant="ghost" size="sm" onClick={() => { }}>
-                                                    <Trash2 size={16} />
-                                                </Button> */}
                                             </div>
                                         </div>
                                     ))}
@@ -272,13 +291,19 @@ const ApplicationsPage = () => {
                     setStatusFilter("all")
                     setSortBy("date")
                 }}
-            // onAddApplication={handleAddApplication}
             />
             <EditApplicationModal
                 isOpen={isEditModalOpen}
                 onClose={closeEditModal}
                 onUpdateApplication={handleUpdateApplication}
                 application={editingApplication}
+            />
+
+            {/* New Application Details Modal */}
+            <ApplicationDetails
+                isOpen={isDetailsModalOpen}
+                onClose={closeDetailsModal}
+                application={selectedApplication}
             />
         </div>
     )
